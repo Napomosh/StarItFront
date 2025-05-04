@@ -1,0 +1,17 @@
+@page "/login"
+@inherits BasePage
+
+<h3>Login</h3>
+
+<div class="form-login">
+    <div class="login-form">
+        <input @bind="Email" placeholder="Email" />
+        <input @bind="Password" type="password" placeholder="Password" />
+        <button @onclick="DoLogin">Login</button>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <p style="color:red">@errorMessage</p>
+}

@@ -1,0 +1,37 @@
+@page "/games"
+@inherits BasePage
+
+<p>@DateTime.Now</p>
+
+<h3 class="mb-4">Game catalog</h3>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+else if (isLoading)
+{
+    <p><em>Loading games...</em></p>
+}
+else if (games.Count == 0)
+{
+    <p><em>No games found :(</em></p>
+}
+else
+{
+    <div class="game-list">
+        @foreach (var game in games)
+        {
+            <div class="game-card">
+                <div class="game-card-header">
+                    <strong>@game.Title</strong>
+                </div>
+                <div class="game-card-body">
+                    <p>@game.Description</p>
+                    <p><small>Rate: @game.Rate/10</small></p>
+                    <p><small>Release date: @game.ReleaseDate.ToShortDateString()</small></p>
+                </div>
+            </div>
+        }
+    </div>
+}
