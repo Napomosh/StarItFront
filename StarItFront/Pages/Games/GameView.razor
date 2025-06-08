@@ -1,0 +1,135 @@
+@page "/games/{GameId:long}"
+@using StarItFront.Common
+@inherits BasePage
+
+<div class="container mt-4">
+    <div class="column">
+        <a href="/games" class="btn btn-secondary mb-3">
+            <i class="oi oi-arrow-left">Back to Games</i>
+        </a>
+    </div>
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger">@errorMessage</div>
+    }
+    else if (isLoading)
+    {
+        <div class="d-flex justify-content-center my-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    }
+    else if (Game == null)
+    {
+        <div class="alert alert-warning">Game not found</div>
+    }
+    else
+    {
+        <div class="card game-view-card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">@Game.Title</h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        @if (!string.IsNullOrEmpty(Game.ImagesPath))
+                        {
+                            <img src="@Game.ImagesPath" class="img-fluid rounded" alt="@Game.Title">
+                        }
+                        else
+                        {
+                            <div class="placeholder-image bg-light d-flex align-items-center justify-content-center rounded">
+                                <span>No image available</span>
+                            </div>
+                        }
+
+                        <div class="mt-3">
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="fw-bold me-2">Rating:</span>
+                                <div class="rating-stars">
+                                    @for (var i = 1; i <= CommonConstants.MAXIMUM_RATING; i++)
+                                    {
+                                        <i class="@(i <= Game.Rate ? "oi oi-star text-warning" : "oi oi-star text-muted")"></i>
+                                    }
+                                    <span class="ms-2">@Game.Rate/10</span>
+                                </div>
+                            </div>
+                            <p><strong>Release Date:</strong> @Game.ReleaseDate.ToString("MM/dd/yyyy")</p>
+                            
+                            @if (Game.SteamId.HasValue)
+                            {
+                                <a href=@string.Concat(CommonConstants.STEAM_GAME_VIEW_LINK, Game.SteamId.Value)
+                                   target="_blank" class="btn btn-dark btn-sm w-100">
+                                    <i class="oi oi-external-link">View on Steam</i>
+                                </a>
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-8">
+                        <h4>Description</h4>
+                        <p class="game-description">@Game.Description</p>
+                        
+                        <div class="row mt-4">
+                            @if (Game.Developers.Count > 0)
+                            {
+                                <div class="col-md-6 mb-3">
+                                    <h5>Developers</h5>
+                                    <div>
+                                        @foreach (var dev in Game.Developers)
+                                        {
+                                            <span class="badge bg-secondary me-1 mb-1">@dev</span>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            
+                            @if (Game.Publishers.Count > 0)
+                            {
+                                <div class="col-md-6 mb-3">
+                                    <h5>Publishers</h5>
+                                    <div>
+                                        @foreach (var publisher in Game.Publishers)
+                                        {
+                                            <span class="badge bg-secondary me-1 mb-1">@publisher</span>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        
+                        <div class="row">
+                            @if (Game.Genre.Count > 0)
+                            {
+                                <div class="col-md-6 mb-3">
+                                    <h5>Genres</h5>
+                                    <div>
+                                        @foreach (var genre in Game.Genre)
+                                        {
+                                            <span class="badge bg-info me-1 mb-1">@genre</span>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            
+                            @if (Game.Distributor.Count > 0)
+                            {
+                                <div class="col-md-6 mb-3">
+                                    <h5>Distributors</h5>
+                                    <div>
+                                        @foreach (var distributor in Game.Distributor)
+                                        {
+                                            <span class="badge bg-info me-1 mb-1">@distributor</span>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -4,6 +4,9 @@ namespace StarItFront.Models.Games;
 
 public class GameCardModel
 {
+    [JsonPropertyName("game_id")]
+    public long GameId { get; set; } = 0;
+    
     [JsonPropertyName("title")]
     public string Title { get; set; } = string.Empty;
     

@@ -14,7 +14,9 @@ public class AuthStateProvider(HttpClient httpClient, ILocalStorageService local
 
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        var token = await localStorage.GetItemAsStringAsync("jwt_token");
+        var token = await localStorage.GetItemAsync<string>("jwt_token");
+        Console.WriteLine($"[AuthStateProvider] Token: {token}. Length: {token?.Length}");
+        // token = token?.Trim('"');
         
         if (string.IsNullOrWhiteSpace(token))
             return anonymous;

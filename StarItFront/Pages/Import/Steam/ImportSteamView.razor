@@ -1,0 +1,72 @@
+@inherits BasePage
+@page "/admin/import/steam"
+@using Microsoft.AspNetCore.Authorization
+@using StarItFront.Common.Auth
+@attribute [Authorize(Roles = AuthConstants.AUTH_ROLE_ADMIN_ABBR)]
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">Steam Data Import</h1>
+            <p class="lead mb-4">
+                Use the buttons below to import different types of data from Steam. 
+                Each operation will fetch the latest data and update the database accordingly.
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100 import-card">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Games</h5>
+                    <p class="card-text flex-grow-1">Import or update games data from Steam API.</p>
+                    <button @onclick="ImportSteamGames" class="btn btn-primary">
+                        <i class="bi bi-controller me-2"></i>Import Games
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100 import-card">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Developers</h5>
+                    <p class="card-text flex-grow-1">Import or update game developers data from Steam.</p>
+                    <button @onclick="ImportDevelopers" class="btn btn-success">
+                        <i class="bi bi-people-fill me-2"></i>Import Developers
+                    </button>
+                </div>
+            </div>
+        </div>
+    
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100 import-card">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Genres</h5>
+                    <p class="card-text flex-grow-1">Import or update game genres data from Steam.</p>
+                    <button @onclick="ImportGenres" class="btn btn-info">
+                        <i class="bi bi-tags-fill me-2"></i>Import Genres
+                    </button>
+                </div>
+            </div>
+        </div>
+    
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100 import-card">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Publishers</h5>
+                    <p class="card-text flex-grow-1">Import or update game publishers data from Steam.</p>
+                    <button @onclick="ImportPublishers" class="btn btn-warning">
+                        <i class="bi bi-building me-2"></i>Import Publishers
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger">@errorMessage</div>
+    }
+</div>

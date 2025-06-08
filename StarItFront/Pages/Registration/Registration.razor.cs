@@ -2,24 +2,23 @@ using System.Net.Http.Json;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using StarItFront.Models;
 using StarItFront.Models.Auth;
 using StarItFront.Models.Registration;
 using StarItFront.Providers.Auth;
 
 namespace StarItFront.Pages.Registration;
 
-public partial class Registration(HttpClient httpClient
-    , NavigationManager navigationManager
-    , ILocalStorageService localStorage
-    , AuthenticationStateProvider authStateProvider) : ComponentBase
+public partial class Registration : BasePage
 {
-    private readonly HttpClient httpClient = httpClient;
-    private readonly NavigationManager navigationManager = navigationManager;
-    private readonly ILocalStorageService localStorage = localStorage;
-    private readonly AuthStateProvider authStateProvider = (AuthStateProvider)authStateProvider;
+    [Inject]
+    private NavigationManager navigationManager { get; set; }
+    [Inject]
+    private ILocalStorageService localStorage { get; set; }
+    [Inject]
+    private AuthStateProvider authStateProvider { get; set; }
     private RegistrationModel registrationModel = new();
-    
-    private string errorMessage = string.Empty;
+  
     private bool registrationSuccessful = false;
 
     private async Task DoRegistration()
@@ -50,7 +49,7 @@ public partial class Registration(HttpClient httpClient
             }
             else
             {
-                var errorContent = await response.Content.ReadAsStringAsync();
+                var errorContent = (await response.Content.ReadFromJsonAsync<ResponseError>())?.Error;
                 errorMessage = string.IsNullOrEmpty(errorContent) 
                     ? $"Registration failed: {response.StatusCode}" 
                     : errorContent;
