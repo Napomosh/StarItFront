@@ -22,7 +22,7 @@ else
     <div class="game-list">
         @foreach (var game in games)
         {
-            <div class="game-card">
+            <div class="game-card" @onclick="@(() => OnGameClick(game.GameId))">
                 <div class="game-card-header">
                     <strong>@game.Title</strong>
                 </div>

@@ -1,22 +1,27 @@
 using System.Net.Http.Json;
+using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Components;
 using StarItFront.Models.Auth;
 using Blazored.LocalStorage;
 using StarItFront.Providers.Auth;
 using Microsoft.AspNetCore.Components.Authorization;
+using StarItFront.Models;
 
 namespace StarItFront.Pages.Auth;
 
-public partial class Login(ILocalStorageService localStorage
-    , AuthenticationStateProvider authStateProvider
-    , NavigationManager navigationManager) : BasePage
+public partial class Login : BasePage
 {
     public required string Email { get; set; }
     public required string Password { get; set; }
     
-    private readonly ILocalStorageService localStorage = localStorage;
-    private readonly AuthStateProvider authStateProvider = (AuthStateProvider)authStateProvider;
-    private readonly NavigationManager navigationManager = navigationManager;
+    [Inject]
+    private ILocalStorageService localStorage { get; set; }
+    
+    [Inject]
+    private AuthenticationStateProvider authStateProvider { get; set; }
+    
+    [Inject]
+    private NavigationManager navigationManager { get; set; }
 
 
     private async Task DoLogin()
@@ -36,11 +41,12 @@ public partial class Login(ILocalStorageService localStorage
                     return;
                 }
                 await localStorage.SetItemAsync("jwt_token", jwtToken);
-                authStateProvider.NotifyUserAuthentication(jwtToken);
+                var concreteAuthStateProvider = (AuthStateProvider)authStateProvider;
+                concreteAuthStateProvider.NotifyUserAuthentication(jwtToken);
             }
             else
             {
-                errorMessage = await response.Content.ReadAsStringAsync();
+                errorMessage = (await response.Content.ReadFromJsonAsync<ResponseError>())?.Error ?? "Invalid server response";
             }
         }
         catch (Exception ex)

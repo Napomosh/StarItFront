@@ -62,7 +62,24 @@ a, .btn-link {
     padding: 1rem 1rem 1rem 3.7rem;
     color: white;
 }
+/* GameView component styles */
+.game-view-card {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
 
+.placeholder-image {
+    height: 300px;
+    border: 1px solid #ddd;
+}
+
+.game-description {
+    white-space: pre-line;
+    line-height: 1.6;
+}
+
+.rating-stars {
+    font-size: 1.2rem;
+}
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
@@ -143,4 +160,23 @@ code {
 .game-card-body {
     font-size: 0.9rem;
     color: #555;
+}
+
+/*Steam import*/
+
+.import-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.import-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.btn {
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 0.5px;
 }

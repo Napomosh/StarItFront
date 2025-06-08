@@ -6,14 +6,16 @@ using StarItFront.Models.Games;
 
 namespace StarItFront.Pages.Games;
 
-public partial class GameList : BasePage, IDisposable
+public partial class GameList : BasePage, IAsyncDisposable
 {
-    [Inject] private IJSRuntime js { get; set; }
+    [Inject] 
+    private IJSRuntime js { get; set; }
+    [Inject] 
+    private NavigationManager navigationManager { get; set; }
     
     private List<GameCardModel> games = [];
     private int currentPage = 1;
     private readonly int pageSize = 20;
-    private bool isLoading = false;
     private bool hasMorePages = true;
     private DotNetObjectReference<GameList>? objRef;
     
@@ -64,14 +66,18 @@ public partial class GameList : BasePage, IDisposable
             StateHasChanged();
         }
     }
-    
-    public void Dispose()
+
+    private void OnGameClick(long id)
     {
-        if (objRef != null)
-        {
-            _ = js.InvokeVoidAsync("removeScrollListener");
-            objRef.Dispose();
-            objRef = null;
-        }
+        navigationManager.NavigateTo($"/games/{id}");
+    }
+    
+    public async ValueTask DisposeAsync()
+    {
+        if (objRef == null) 
+            return;
+        await js.InvokeVoidAsync("removeScrollListener");
+        objRef.Dispose();
+        objRef = null;
     }
 }
